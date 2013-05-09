@@ -21,11 +21,11 @@ Or install it yourself as:
     # config/locale/flags.yml
     ja:
         activerecord:
-            yes_no: &yes_no
-                true: "yes"
-                false: "no"
-            my_model:
-                flags:
+            flags:
+                yes_no: &yes_no
+                    true: "yes"
+                    false: "no"
+                my_model:
                     my_flag:
                         0: "無し"
                         1: "あり"
