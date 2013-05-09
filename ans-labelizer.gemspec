@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["sakai@ans-web.co.jp"]
   gem.description   = %q{all_flags 的なカラムのラベルを取得するメソッドを追加する}
   gem.summary       = %q{model 用の locale 設定を読み込んで、ラベルメソッドを追加する}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/answer/ans-labelizer"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
