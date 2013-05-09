@@ -40,7 +40,7 @@ Or install it yourself as:
         include Ans::Labelizer
     end
     
-MyModel に `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のように取得できる
+MyModel の `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のように取得できる
 
     MyModel.my_flag_labels # => {0 => "無し", 1 => "あり", 2 => "その他"}
     MyModel.my_flag_keys # => {"無し" => 0, "あり" => 1, "その他" => 2}
