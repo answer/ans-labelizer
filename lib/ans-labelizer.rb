@@ -2,29 +2,33 @@ require "ans-labelizer/version"
 
 module Ans
   module Labelizer
-    class Config
-      def initialize
-        @locale_path = "activerecord.flags"
-        @hash_method_suffix = "_labels"
-        @inverse_method_suffix = "_keys"
-        @label_method_suffix = "_label"
-      end
+    include ActiveSupport::Configurable
 
-      attr_accessor :locale_path, :hash_method_suffix, :inverse_method_suffix, :label_method_suffix
-    end
-
-    def self.config
-      @config ||= Config.new
-    end
-    def self.configure
-      yield config
+    configure do |config|
+      config.locale_path = "activerecord.flags"
+      config.hash_method_suffix = "_labels"
+      config.inverse_method_suffix = "_keys"
+      config.label_method_suffix = "_label"
     end
 
     def self.included(m)
-      m.send :include, InstanceMethods
-      m.send :extend, ClassMethods
+      class_name = m.class.to_s.to_sym
 
-      config = self.config
+      instance_methods = nil
+      class_methods = nil
+
+      InstanceMethods.class_eval do
+        instance_methods = Module.new
+        const_set class_name, instance_methods
+        m.send :include, instance_methods
+      end
+      ClassMethods.class_eval do
+        class_methods = Module.new
+        const_set class_name, class_methods
+        m.send :extend, class_methods
+      end
+
+      config = Ans::Labelizer.config
 
       locale_path = config.locale_path
       hash_method_suffix = config.hash_method_suffix
@@ -34,7 +38,7 @@ module Ans
       ::I18n.t("#{locale_path}.#{m.model_name.underscore}", default: {}).each do |column,hash|
         inverse = hash.invert
 
-        ClassMethods.class_eval do
+        class_methods.class_eval do
           define_method :"#{column}#{hash_method_suffix}" do
             hash
           end
@@ -42,7 +46,7 @@ module Ans
             inverse
           end
         end
-        InstanceMethods.class_eval do
+        instance_methods.class_eval do
           define_method :"#{column}#{label_method_suffix}" do
             hash[send :"#{column}"]
           end

@@ -20,24 +20,24 @@ Or install it yourself as:
 
     # config/locale/flags.yml
     ja:
-        activerecord:
-            flags:
-                yes_no: &yes_no
-                    true: "yes"
-                    false: "no"
-                my_model:
-                    my_flag:
-                        0: "無し"
-                        1: "あり"
-                        2: "その他"
-                    is_flag:
-                        true: "はい"
-                        false: "いいえ"
-                    is_ok:
-                        <<: *yes_no
+      activerecord:
+        flags:
+          yes_no: &yes_no
+            true: "yes"
+            false: "no"
+          my_model:
+            my_flag:
+              0: "無し"
+              1: "あり"
+              2: "その他"
+            is_flag:
+              true: "はい"
+              false: "いいえ"
+            is_ok:
+              <<: *yes_no
 
     class MyModel
-        include Ans::Labelizer
+      include Ans::Labelizer
     end
     
 MyModel の `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のように取得できる
@@ -69,17 +69,17 @@ yaml のマージを利用すると解消できるが、そのためにはフラ
     # config/initializers/ans-labelizer.rb
     Ans::Labelizer.configure do |config|
 
-        # locale を検索するパスを設定
-        # この後ろに model_name.underscore した文字列を連結して全フラグを取得する
-        config.locale_path = "activerecord.flags"
+      # locale を検索するパスを設定
+      # この後ろに model_name.underscore した文字列を連結して全フラグを取得する
+      config.locale_path = "activerecord.flags"
 
-        # フラグラベルのハッシュを取得するクラスメソッドの接尾辞
-        config.hash_method_suffix = "_labels"
-        # ハッシュを invert したものを取得するクラスメソッドの接尾辞
-        config.inverse_method_suffix = "_keys"
+      # フラグラベルのハッシュを取得するクラスメソッドの接尾辞
+      config.hash_method_suffix = "_labels"
+      # ハッシュを invert したものを取得するクラスメソッドの接尾辞
+      config.inverse_method_suffix = "_keys"
 
-        # フラグのラベルを取得するインスタンスメソッドの接尾辞
-        config.label_method_suffix = "_label"
+      # フラグのラベルを取得するインスタンスメソッドの接尾辞
+      config.label_method_suffix = "_label"
 
     end
 
