@@ -43,15 +43,15 @@ Or install it yourself as:
 MyModel の `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のように取得できる
 
     MyModel.my_flag_labels # => {0 => "無し", 1 => "あり", 2 => "その他"}
-    MyModel.my_flag_names # => {0 => "none", 1 => "my_flag", 2 => "other_flag"}
+    MyModel.my_flag_names # => {0 => :none, 1 => :my_flag, 2 => :other_flag}
     MyModel.my_flag_keys # => {"無し" => 0, "あり" => 1, "その他" => 2}
-    MyModel.my_flag_name_keys # => {"none" => 0, "my_flag" => 1, "other_flag" => 2}
+    MyModel.my_flag_name_keys # => {:none => 0, :my_flag => 1, :other_flag => 2}
 
     item = MyModel.find(id)
 
     item.my_flag # => 2
     item.my_flag_label # => "その他"
-    item.my_flag_name # => "other_flag"
+    item.my_flag_name # => :other_flag
     item.my_flag_name_other_flag? # => true (全ての name に対してメソッドが定義される)
     item.my_flag_name_my_flag! # => item.my_flag を 1 (name: my_flag) に設定
 
@@ -65,8 +65,9 @@ MyModel の `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のよ�
 
 Hash の `[]` メソッドの呼び出しを行っているため、キーが存在しない場合は nil が帰る
 
-yaml のラベル部分を {'name': 'label'} のように定義すると、このハッシュの key 部分を name 、 value 部分を label として認識する  
-name にはプログラムで使用するようなアルファベットの名前を、 label には表示用の名前を指定する
+yaml のラベル部分を {name: label} のように定義すると、このハッシュの key 部分を name 、 value 部分を label として認識する  
+name にはプログラムで使用するようなアルファベットの名前を、 label には表示用の名前を指定する  
+キー部分の型は、 yaml がパースしたままの型で返されるので、文字列や boolean などの型になるように yaml を記述するとそのように取得されるはず
 
 全てのフラグに name に相当するものがあるわけではないので、その場合は name を省略して書ける
 
