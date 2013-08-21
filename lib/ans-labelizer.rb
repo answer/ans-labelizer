@@ -7,8 +7,11 @@ module Ans
     configure do |config|
       config.locale_path = "activerecord.flags"
       config.hash_method_suffix = "_labels"
+      config.name_hash_method_suffix = "_names"
       config.inverse_method_suffix = "_keys"
+      config.name_inverse_method_suffix = "_name_keys"
       config.label_method_suffix = "_label"
+      config.name_method_suffix = "_name"
     end
 
     def self.included(m)
@@ -32,23 +35,59 @@ module Ans
 
       locale_path = config.locale_path
       hash_method_suffix = config.hash_method_suffix
+      name_hash_method_suffix = config.name_hash_method_suffix
       inverse_method_suffix = config.inverse_method_suffix
+      name_inverse_method_suffix = config.name_inverse_method_suffix
       label_method_suffix = config.label_method_suffix
+      name_method_suffix = config.name_method_suffix
 
       ::I18n.t("#{locale_path}.#{m.model_name.underscore}", default: {}).each do |column,hash|
-        inverse = hash.invert
+        name_hash = {}
+        label_hash = {}
+        hash.each do |value,labels|
+          case labels
+          when Hash
+            labels.each do |k,v|
+              name_hash[value] = k
+              label_hash[value] = v
+              break
+            end
+          else
+            label_hash[value] = labels
+          end
+        end
+
+        name_inverse = name_hash.invert
+        label_inverse = label_hash.invert
 
         class_methods.class_eval do
           define_method :"#{column}#{hash_method_suffix}" do
-            hash
+            label_hash
+          end
+          define_method :"#{column}#{name_hash_method_suffix}" do
+            name_hash
           end
           define_method :"#{column}#{inverse_method_suffix}" do
-            inverse
+            label_inverse
+          end
+          define_method :"#{column}#{name_inverse_method_suffix}" do
+            name_inverse
           end
         end
         instance_methods.class_eval do
           define_method :"#{column}#{label_method_suffix}" do
-            hash[send :"#{column}"]
+            label_hash[send :"#{column}"]
+          end
+          define_method :"#{column}#{name_method_suffix}" do
+            name_hash[send :"#{column}"]
+          end
+          name_hash.each do |value,name|
+            define_method :"#{column}#{name_method_suffix}_#{name}?" do
+              send(:"#{column}") == value
+            end
+            define_method :"#{column}#{name_method_suffix}_#{name}!" do
+              send(:"#{column}=", value)
+            end
           end
         end
       end
