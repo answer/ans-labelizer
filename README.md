@@ -27,9 +27,9 @@ Or install it yourself as:
             false: "no"
           my_model:
             my_flag:
-              0: "無し"
-              1: "あり"
-              2: "その他"
+              0: {none: "無し"}
+              1: {my_flag: "あり"}
+              2: {other_flag: "その他"}
             is_flag:
               true: "はい"
               false: "いいえ"
@@ -39,24 +39,36 @@ Or install it yourself as:
     class MyModel
       include Ans::Labelizer
     end
-    
+
 MyModel の `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のように取得できる
 
     MyModel.my_flag_labels # => {0 => "無し", 1 => "あり", 2 => "その他"}
+    MyModel.my_flag_names # => {0 => "none", 1 => "my_flag", 2 => "other_flag"}
     MyModel.my_flag_keys # => {"無し" => 0, "あり" => 1, "その他" => 2}
+    MyModel.my_flag_name_keys # => {"none" => 0, "my_flag" => 1, "other_flag" => 2}
 
     item = MyModel.find(id)
 
     item.my_flag # => 2
     item.my_flag_label # => "その他"
+    item.my_flag_name # => "other_flag"
+    item.my_flag_name_other_flag? # => true (全ての name に対してメソッドが定義される)
+    item.my_flag_name_my_flag! # => item.my_flag を 1 (name: my_flag) に設定
 
     item.is_flag # => true
     item.is_flag_label # => "はい"
+    item.is_flag_name # => nil (未設定の場合は nil)
 
     item.is_ok # => false
     item.is_ok_label # => no
+    item.is_ok_name # => nil
 
 Hash の `[]` メソッドの呼び出しを行っているため、キーが存在しない場合は nil が帰る
+
+name にはプログラムで使用するようなアルファベットの名前を指定する  
+label には表示用の名前を指定する
+
+全てのフラグに name に相当するものがあるわけではないので、その場合は name を省略して書ける
 
 いくつかのフラグ間でラベルを共有したい場合がままある
 
@@ -77,12 +89,17 @@ yaml のマージを利用すると解消できるが、そのためにはフラ
 
       # フラグラベルのハッシュを取得するクラスメソッドの接尾辞
       config.hash_method_suffix = "_labels"
-      # ハッシュを invert したものを取得するクラスメソッドの接尾辞
+      # フラグ名のハッシュを取得するクラスメソッドの接尾辞
+      config.name_hash_method_suffix = "_names"
+      # フラグラベルハッシュを invert したものを取得するクラスメソッドの接尾辞
       config.inverse_method_suffix = "_keys"
+      # フラグ名ハッシュを invert したものを取得するクラスメソッドの接尾辞
+      config.name_inverse_method_suffix = "_name_keys"
 
       # フラグのラベルを取得するインスタンスメソッドの接尾辞
       config.label_method_suffix = "_label"
-
+      # フラグの名前を取得するインスタンスメソッドの接尾辞
+      config.name_method_suffix = "_name"
     end
 
 ## Contributing
