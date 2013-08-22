@@ -16,7 +16,7 @@ module Ans
     end
 
     def self.included(m)
-      class_name = m.class.to_s.to_sym
+      class_name = m.to_s.to_sym
 
       instance_methods = nil
       class_methods = nil
