@@ -10,6 +10,7 @@ module Ans
       config.name_hash_method_suffix = "_names"
       config.inverse_method_suffix = "_keys"
       config.name_inverse_method_suffix = "_name_keys"
+      config.values_method_suffix = "_values"
       config.label_method_suffix = "_label"
       config.name_method_suffix = "_name"
     end
@@ -38,6 +39,7 @@ module Ans
       name_hash_method_suffix = config.name_hash_method_suffix
       inverse_method_suffix = config.inverse_method_suffix
       name_inverse_method_suffix = config.name_inverse_method_suffix
+      values_method_suffix = config.values_method_suffix
       label_method_suffix = config.label_method_suffix
       name_method_suffix = config.name_method_suffix
 
@@ -72,6 +74,11 @@ module Ans
           end
           define_method :"#{column}#{name_inverse_method_suffix}" do
             name_inverse
+          end
+          define_method :"#{column}#{values_method_suffix}" do |*keys|
+            keys.map{|key|
+              name_inverse[key]
+            }.compact
           end
         end
         instance_methods.class_eval do

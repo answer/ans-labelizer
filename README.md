@@ -47,6 +47,8 @@ MyModel の `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のよ�
     MyModel.my_flag_keys # => {"無し" => 0, "あり" => 1, "その他" => 2}
     MyModel.my_flag_name_keys # => {:none => 0, :my_flag => 1, :other_flag => 2}
 
+    MyModel.my_flag_values(:none,:my_flag) # => [0, 1] # name が :none か :my_flag の値を取得
+
     item = MyModel.find(id)
 
     item.my_flag # => 2
@@ -96,6 +98,9 @@ yaml のマージを利用すると解消できるが、そのためにはフラ
       config.inverse_method_suffix = "_keys"
       # フラグ名ハッシュを invert したものを取得するクラスメソッドの接尾辞
       config.name_inverse_method_suffix = "_name_keys"
+
+      # フラグ名から値を取得するクラスメソッドの接尾辞
+      config.values_method_suffix = "_values"
 
       # フラグのラベルを取得するインスタンスメソッドの接尾辞
       config.label_method_suffix = "_label"
