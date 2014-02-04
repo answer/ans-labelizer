@@ -89,10 +89,10 @@ module Ans
             name_hash[send :"#{column}"]
           end
           name_hash.each do |value,name|
-            define_method :"#{column}#{name_method_suffix}_#{name}?" do
+            define_method :"#{column}_#{name}?" do
               send(:"#{column}") == value
             end
-            define_method :"#{column}#{name_method_suffix}_#{name}!" do
+            define_method :"#{column}_#{name}!" do
               send(:"#{column}=", value)
             end
           end
