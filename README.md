@@ -54,8 +54,8 @@ MyModel の `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のよ�
     item.my_flag # => 2
     item.my_flag_label # => "その他"
     item.my_flag_name # => :other_flag
-    item.my_flag_name_other_flag? # => true (全ての name に対してメソッドが定義される)
-    item.my_flag_name_my_flag! # => item.my_flag を 1 (name: my_flag) に設定
+    item.my_flag_other_flag? # => true (全ての name に対してメソッドが定義される)
+    item.my_flag_my_flag! # => item.my_flag を 1 (name: my_flag) に設定
 
     item.is_flag # => true
     item.is_flag_label # => "はい"
