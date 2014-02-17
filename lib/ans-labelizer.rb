@@ -16,19 +16,27 @@ module Ans
     end
 
     def self.included(m)
-      class_name = m.to_s.to_sym
+      label_class_name = "#{m.to_s.gsub("::","__")}AnsLabels".to_sym
 
       instance_methods = nil
       class_methods = nil
 
       InstanceMethods.class_eval do
-        instance_methods = Module.new
-        const_set class_name, instance_methods
+        if const_defined?(label_class_name)
+          instance_methods = const_get label_class_name
+        else
+          instance_methods = Module.new
+          const_set label_class_name, instance_methods
+        end
         m.send :include, instance_methods
       end
       ClassMethods.class_eval do
-        class_methods = Module.new
-        const_set class_name, class_methods
+        if const_defined?(label_class_name)
+          class_methods = const_get label_class_name
+        else
+          class_methods = Module.new
+          const_set label_class_name, class_methods
+        end
         m.send :extend, class_methods
       end
 
