@@ -16,7 +16,7 @@ module Ans
     end
 
     def self.included(m)
-      label_class_name = "#{m.to_s}AnsLabels".to_sym
+      label_class_name = "#{m.to_s.gsub("::","__")}AnsLabels".to_sym
 
       instance_methods = nil
       class_methods = nil
