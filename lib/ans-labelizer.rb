@@ -18,28 +18,6 @@ module Ans
     def self.included(m)
       label_class_name = "#{m.to_s.gsub("::","__")}AnsLabels".to_sym
 
-      instance_methods = nil
-      class_methods = nil
-
-      InstanceMethods.class_eval do
-        if const_defined?(label_class_name)
-          instance_methods = const_get label_class_name
-        else
-          instance_methods = Module.new
-          const_set label_class_name, instance_methods
-        end
-        m.send :include, instance_methods
-      end
-      ClassMethods.class_eval do
-        if const_defined?(label_class_name)
-          class_methods = const_get label_class_name
-        else
-          class_methods = Module.new
-          const_set label_class_name, class_methods
-        end
-        m.send :extend, class_methods
-      end
-
       config = Ans::Labelizer.config
 
       locale_path = config.locale_path
@@ -51,7 +29,7 @@ module Ans
       label_method_suffix = config.label_method_suffix
       name_method_suffix = config.name_method_suffix
 
-      ::I18n.t("#{locale_path}.#{m.model_name.underscore}", default: {}).each do |column,hash|
+      ::I18n.t("#{locale_path}.#{m.model_name.singular}", default: {}).each do |column,hash|
         name_hash = {}
         label_hash = {}
         hash.each do |value,labels|
@@ -70,7 +48,7 @@ module Ans
         name_inverse = name_hash.invert
         label_inverse = label_hash.invert
 
-        class_methods.class_eval do
+        (class << m; self; end).class_eval do
           define_method :"#{column}#{hash_method_suffix}" do
             label_hash
           end
@@ -89,7 +67,7 @@ module Ans
             }.compact
           end
         end
-        instance_methods.class_eval do
+        m.class_eval do
           define_method :"#{column}#{label_method_suffix}" do
             label_hash[send :"#{column}"]
           end
@@ -106,11 +84,6 @@ module Ans
           end
         end
       end
-    end
-
-    module InstanceMethods
-    end
-    module ClassMethods
     end
   end
 end
