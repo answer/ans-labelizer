@@ -129,6 +129,16 @@ yaml のマージを利用すると解消できるが、そのためにはフラ
       config.label_method_suffix = "_label"
       # フラグの名前を取得するインスタンスメソッドの接尾辞
       config.name_method_suffix = "_name"
+      
+      # フラグの値を取得するクラスメソッド、インスタンスメソッドの接尾辞
+      config.get_method_suffix = "_of"
+      # フラグの値を確認するインスタンスメソッドの接尾辞
+      config.confirm_method_suffix = "_is?"
+      # フラグの値を変更するインスタンスメソッドの接尾辞
+      config.transition_method_suffix = "_name="
+      
+      # 全フラグ情報を取得するクラスメソッドの接尾辞
+      config.flags_method_name = "labelizer_flags"
     end
 
 ## Contributing
