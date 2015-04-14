@@ -82,7 +82,7 @@ module Ans
           end
           define_method :"#{column}#{values_method_suffix}" do |*keys|
             keys.map{|key|
-              unless name_inverse.has_key?(name)
+              unless name_inverse.has_key?(key)
                 raise KeyError, "label key not found. [#{name}] -- all keys: #{name_inverse.keys.inspect}"
               end
               name_inverse[key]
