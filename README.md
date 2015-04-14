@@ -78,7 +78,7 @@ MyModel の `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のよ�
 
     item.my_flag_of(:my_flag) # => 1
     item.my_flag_is?(:other_flag) # => true
-    item.my_flag_name = :my_flag # => item.my_flag を 1 (name: other_flag) に設定
+    item.my_flag_name = :my_flag # => item.my_flag を 1 (name: my_flag) に設定
 
     item.is_flag # => true
     item.is_flag_label # => "はい"
