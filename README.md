@@ -42,6 +42,8 @@ Or install it yourself as:
 
 MyModel の `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のように取得できる
 
+クラスメソッド
+
     MyModel.my_flag_labels # => {0 => "無し", 1 => "あり", 2 => "その他"}
     MyModel.my_flag_names # => {0 => :none, 1 => :my_flag, 2 => :other_flag}
     MyModel.my_flag_keys # => {"無し" => 0, "あり" => 1, "その他" => 2}
@@ -49,13 +51,34 @@ MyModel の `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のよ�
 
     MyModel.my_flag_values(:none,:my_flag) # => [0, 1] # name が :none か :my_flag の値を取得
 
+    MyModel.my_flag_of(:my_flag) # => 1
+    MyModel.my_flag_my_flag # => 1
+
+    MyModel.labelizer_flags
+    {
+      my_flag: {
+        name: {0 => :none, 1 => :my_flag, 2 => :other_flag},
+        label: {0 => "無し", 1 => "あり", 2 => "その他"},
+        name_inverse: {:none => 0, :my_flag => 1, :other_flag => 2},
+        label_inverse: {:none => 0, :my_flag => 1, :other_flag => 2},
+      },
+      ...
+    }
+
+インスタンスメソッド
+
     item = MyModel.find(id)
 
     item.my_flag # => 2
     item.my_flag_label # => "その他"
     item.my_flag_name # => :other_flag
+    item.my_flag_my_flag # => 1 :my_flag の値を返す
     item.my_flag_other_flag? # => true (全ての name に対してメソッドが定義される)
     item.my_flag_my_flag! # => item.my_flag を 1 (name: my_flag) に設定
+
+    item.my_flag_of(:my_flag) # => 1
+    item.my_flag_is?(:other_flag) # => true
+    item.my_flag_name = :my_flag # => item.my_flag を 1 (name: other_flag) に設定
 
     item.is_flag # => true
     item.is_flag_label # => "はい"
