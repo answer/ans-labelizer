@@ -15,6 +15,7 @@ module Ans
       config.name_method_suffix = "_name"
       config.get_method_suffix = "_of"
       config.confirm_method_suffix = "_is?"
+      config.inclusion_method_suffix = "_in?"
       config.transition_method_suffix = "_name="
       config.flags_method_name = "labelizer_flags"
     end
@@ -34,6 +35,7 @@ module Ans
       name_method_suffix = config.name_method_suffix
       get_method_suffix = config.get_method_suffix
       confirm_method_suffix = config.confirm_method_suffix
+      inclusion_method_suffix = config.inclusion_method_suffix
       transition_method_suffix = config.transition_method_suffix
       flags_method_name = config.flags_method_name
 
@@ -119,6 +121,15 @@ module Ans
               raise KeyError, "label key not found. [#{name}] -- all keys: #{name_inverse.keys.inspect}"
             end
             send(:"#{column}") == name_inverse[name]
+          end
+          define_method :"#{column}#{inclusion_method_suffix}" do |*names|
+            value = send(:"#{column}")
+            names.any?{|name|
+              unless name_inverse.has_key?(name)
+                raise KeyError, "label key not found. [#{name}] -- all keys: #{name_inverse.keys.inspect}"
+              end
+              value == name_inverse[name]
+            }
           end
           define_method :"#{column}#{transition_method_suffix}" do |name|
             unless name_inverse.has_key?(name)
