@@ -76,6 +76,7 @@ MyModel の `my_flag`, `is_flag`, `is_ok` カラムのラベルを以下のよ�
     item.my_flag_other_flag? # => true (全ての name に対してメソッドが定義される)
     item.my_flag_my_flag! # => item.my_flag を 1 (name: my_flag) に設定
 
+    item.my_flag_values(:none,:my_flag) # => [0, 1]
     item.my_flag_of(:my_flag) # => 1
     item.my_flag_is?(:other_flag) # => true
     item.my_flag_in?(:my_flag, :other_flag) # => true
