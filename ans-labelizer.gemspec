@@ -5,7 +5,7 @@ require 'ans-labelizer/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "ans-labelizer"
-  gem.version       = "2.0.6"
+  gem.version       = Ans::Labelizer::VERSION
   gem.authors       = ["sakai shunsuke"]
   gem.email         = ["sakai@ans-web.co.jp"]
   gem.description   = %q{all_flags 的なカラムのラベルを取得するメソッドを追加する}
